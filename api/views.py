@@ -69,3 +69,54 @@ def get_task(request: HttpRequest, pk) -> JsonResponse:
                     'completed': todo.completed
         }
         return JsonResponse(updated)
+    
+# Mark a task as complete
+def completed(request:HttpRequest, pk):
+    if request.method == 'GET':
+        todo = Todo.objects.get(id=pk)
+        todo.completed = True
+        todo.save()
+    return JsonResponse({'Updated': True})
+
+# Delete a task
+def delete(request:HttpRequest, pk):
+    if request.method == 'GET':
+        todo = Todo.objects.get(id=pk)
+        todo.delete()
+    return JsonResponse({"Deleted": True})
+
+# Get all completed tasks
+def completed_tasks(request: HttpRequest):
+    todos = Todo.objects.filter(completed=True)
+    data = []
+
+    response = {
+        'todos': data
+    }
+    for todo in todos:
+        data.append(
+            {
+                'task': todo.task,
+                'description': todo.description,
+                'completed': todo.completed
+            }
+        ) 
+    return JsonResponse(response)
+
+# Get all incompleted tasks
+def completed_tasks(request: HttpRequest):
+    todos = Todo.objects.filter(completed=False)
+    data = []
+
+    response = {
+        'todos': data
+    }
+    for todo in todos:
+        data.append(
+            {
+                'task': todo.task,
+                'description': todo.description,
+                'completed': todo.completed
+            }
+        ) 
+    return JsonResponse(response)
