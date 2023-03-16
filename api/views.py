@@ -43,7 +43,10 @@ def get_tasks(request: HttpRequest) -> JsonResponse:
 # get task or update task
 def get_task(request: HttpRequest, pk) -> JsonResponse:
     if request.method == 'GET':
-        todo = Todo.objects.get(id = pk)
+        try:
+            todo = Todo.objects.get(id = pk)
+        except:
+            return JsonResponse({"result": "This task didn't find"})
         response = {
                     'task': todo.task,
                     'description': todo.description,
@@ -54,7 +57,10 @@ def get_task(request: HttpRequest, pk) -> JsonResponse:
         decoded = request.body.decode()
         data = json.loads(decoded)
 
-        todo = Todo.objects.get(id=pk)
+        try:
+            todo = Todo.objects.get(id = pk)
+        except:
+            return JsonResponse({"result": "This task didn't find"})
         if data.get('task') != None:
             todo.task = data.get('task')
         if data.get('description') != None:
@@ -71,17 +77,23 @@ def get_task(request: HttpRequest, pk) -> JsonResponse:
         return JsonResponse(updated)
     
 # Mark a task as complete
-def complete(request:HttpRequest, pk):
+def complete_task(request:HttpRequest, pk):
     if request.method == 'GET':
-        todo = Todo.objects.get(id=pk)
+        try:
+            todo = Todo.objects.get(id = pk)
+        except:
+            return JsonResponse({"result": "This task didn't find"})
         todo.completed = True
         todo.save()
     return JsonResponse({'Updated': True})
 
 # Delete a task
-def delete(request:HttpRequest, pk):
+def delete_task(request:HttpRequest, pk):
     if request.method == 'GET':
-        todo = Todo.objects.get(id=pk)
+        try:
+            todo = Todo.objects.get(id = pk)
+        except:
+            return JsonResponse({"result": "This task didn't find"})
         todo.delete()
     return JsonResponse({"Deleted": True})
 
