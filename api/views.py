@@ -71,7 +71,7 @@ def get_task(request: HttpRequest, pk) -> JsonResponse:
         return JsonResponse(updated)
     
 # Mark a task as complete
-def completed(request:HttpRequest, pk):
+def complete(request:HttpRequest, pk):
     if request.method == 'GET':
         todo = Todo.objects.get(id=pk)
         todo.completed = True
@@ -104,7 +104,7 @@ def completed_tasks(request: HttpRequest):
     return JsonResponse(response)
 
 # Get all incompleted tasks
-def completed_tasks(request: HttpRequest):
+def incompleted_tasks(request: HttpRequest):
     todos = Todo.objects.filter(completed=False)
     data = []
 
